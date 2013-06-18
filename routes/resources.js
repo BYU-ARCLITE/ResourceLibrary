@@ -1,7 +1,5 @@
 var db = require("../db/db");
 var Resource = require("../models/resource");
-var Relation = require("../models/relation");
-var async = require("async");
 
 // OPTIONS whatever
 exports.options = function options(req, res) {
@@ -161,51 +159,6 @@ exports.addFile = function addFile(req, res) {
 // POST /[id]/ratings
 // Not implemented
 
-// GET /[id]/relations
-exports.getRelations = function getRelations(req, res) {
-    var id = req.params[0];
-    db.list("relation", function (items) {
-
-        // Asynchronously map the ids to their objects
-        async.map(items, function (id, callback) {
-            db.retrieve("relation", id, function (relation) {
-                callback(null, relation);
-            });
-        }, function (err, results) {
-            var relations = results.filter(function (relation) {
-                return (relation.subjectId === id || relation.objectId === id);
-            });
-            res.set("Access-Control-Allow-Origin", req.get("Origin"));
-            res.send({
-                relations: relations,
-                response: {
-                    code: 200,
-                    message: "OK"
-                }
-            });
-        });
-    });
-};
-
-// POST /[id]/relations
-exports.createRelation = function createRelation(req, res) {
-    var id = req.params[0];
-    var relation = new Relation(req.body);
-    if (!relation.subjectId) {
-        relation.subjectId = id;
-    }
-    relation.save(function (relation) {
-        res.set("Access-Control-Allow-Origin", req.get("Origin"));
-        res.send({
-            "relation": relation,
-            response: {
-                code: 201,
-                message: "Created"
-            }
-        });
-    });
-};
-
 // GET /[id]/request-upload-url
 exports.requestUploadUrl = function requestUploadUrl(req, res) {
     var id = req.params[0];
@@ -232,6 +185,3 @@ exports.requestUploadUrl = function requestUploadUrl(req, res) {
         }
     });
 };
-
-// DELETE /[id]/relations/[relationId]
-// Not implemented

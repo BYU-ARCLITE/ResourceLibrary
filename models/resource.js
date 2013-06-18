@@ -8,26 +8,20 @@
 
 var merge = require("./merge.js");
 var db = require("../db/db");
-
-function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-}
-
-function guid() {
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
-
-function randomToken() {
-    return s4() + s4() + s4();
-}
+var guid = require("./guid.js");
 
 function Resource(data) {
-    this.id = guid();
+    this.id = guid.guid();
     this.categories = [];
     this.dateModified = new Date().toISOString();
     this.description = "";
     this.keywords = "";
-    this.language = "en";
+
+    // Language fix
+    this.languages = [];
+    if (data.language)
+        this.languages = [data.language];
+
     this.status = "awaiting content";
     this.title = "Unnamed";
     this.type = "data";
@@ -60,10 +54,9 @@ Resource.prototype.update = function (data) {
 };
 
 Resource.prototype.createToken = function (callback) {
-    var token = randomToken();
+    var token = guid.token();
     var _this = this;
     db.retrieve("token", this.id, function (data) {
-        var tokens;
         if (data) {
             data.tokens.push(token);
         } else {
@@ -79,11 +72,7 @@ Resource.prototype.createToken = function (callback) {
 Resource.prototype.checkToken = function (token, callback) {
     db.retrieve("token", this.id, function (data) {
         if (data) {
-            if (data.tokens.indexOf(token) >= 0) {
-                callback(true);
-            } else {
-                callback(false);
-            }
+            callback(data.tokens.indexOf(token) >= 0);
         } else {
             callback(false);
         }

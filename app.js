@@ -6,6 +6,7 @@
 var express = require('express');
 var routes = require('./routes');
 var resources = require('./routes/resources');
+var relations = require('./routes/relations');
 var http = require('http');
 var path = require('path');
 
@@ -35,9 +36,16 @@ app.get(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)$/, resources.getResource);
 app.put(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)$/, resources.updateResource);
 app.delete(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)$/, resources.deleteResource);
 app.post(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)\/content\/([a-zA-Z0-9_-]+)$/, resources.addFile);
-app.get(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)\/relations$/, resources.getRelations);
-app.post(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)\/relations$/, resources.createRelation);
 app.get(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)\/request-upload-url$/, resources.requestUploadUrl);
+
+// New relation api
+// https://github.com/AmericanCouncils/AyamelResourceApiServer/issues/84
+app.get(/^\/api\/v1\/relations$/, relations.getRelations);
+app.post(/^\/api\/v1\/relations$/, relations.createRelation);
+
+//app.get(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)\/relations$/, resources.getRelations);
+//app.post(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)\/relations$/, resources.createRelation);
+
 
 app.options(/^.*$/, resources.options);
 

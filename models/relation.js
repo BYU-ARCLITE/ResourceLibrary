@@ -1,16 +1,9 @@
 var merge = require("./merge.js");
 var db = require("../db/db");
-
-function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-}
-
-function guid() {
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
+var guid = require("./guid.js");
 
 function Relation(data) {
-    this.id = guid();
+    this.id = guid.guid();
     this.subjectId = "";
     this.objectId = "";
     this.type = "part_of";
