@@ -24,7 +24,9 @@ exports.save = function save(model, id, obj, callback) {
 
 exports.del = function del(model, id) {
 //    delete db[model][id];
-    console.log("Delete not implemented.");
+    db[model].get(id, function (err, body) {
+        db[model].destroy(id, body._rev, function(){});
+    })
 };
 
 exports.list = function list(model, callback) {

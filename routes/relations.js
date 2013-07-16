@@ -63,3 +63,17 @@ exports.createRelation = function createRelation(req, res) {
         });
     });
 };
+
+// DELETE /relations/id
+exports.deleteRelation = function deleteRelation(req, res) {
+    var id = req.params[0];
+
+    db.del("relation", id);
+    res.set("Access-Control-Allow-Origin", req.get("Origin"));
+    res.send({
+        response: {
+            code: 410,
+            message: "Gone"
+        }
+    });
+};

@@ -42,6 +42,7 @@ app.get(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)\/request-upload-url$/, resource
 // https://github.com/AmericanCouncils/AyamelResourceApiServer/issues/84
 app.get(/^\/api\/v1\/relations$/, relations.getRelations);
 app.post(/^\/api\/v1\/relations$/, relations.createRelation);
+app.delete(/^\/api\/v1\/relations\/([a-zA-Z0-9_-]+)$/, relations.deleteRelation);
 
 //app.get(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)\/relations$/, resources.getRelations);
 //app.post(/^\/api\/v1\/resources\/([a-zA-Z0-9_-]+)\/relations$/, resources.createRelation);
