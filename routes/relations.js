@@ -20,7 +20,7 @@ exports.getRelations = function getRelations(req, res) {
         // Asynchronously map the ids to their objects
         async.map(items, function (id, callback) {
             db.retrieve("relation", id, function (relation) {
-                callback(null, relation);
+                callback(null, new Relation(relation));
             });
         }, function (err, results) {
 

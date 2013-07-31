@@ -35,7 +35,6 @@ function Resource(data) {
     this.content = {
         files: []
     };
-    this.clientUser = {};
 
     // See if we are creating this resource from something
     if (data) {
@@ -59,7 +58,7 @@ function Resource(data) {
         this.type = "document";
 
     // Backwards compatibility between attributes and  clientUser
-    if (this.attributes && this.attributes.ayamel_ownerType && this.attributes.ayamel_ownerId) {
+    if (!(this.clientUser) && this.attributes && this.attributes.ayamel_ownerType && this.attributes.ayamel_ownerId) {
         this.clientUser = {
             id: this.attributes.ayamel_ownerType + ":" + this.attributes.ayamel_ownerId
         };
