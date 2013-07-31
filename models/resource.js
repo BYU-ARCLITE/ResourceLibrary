@@ -57,6 +57,15 @@ function Resource(data) {
     // Make sure that "text" type is actually "document"
     if (this.type === "text")
         this.type = "document";
+
+    // Backwards compatibility between attributes and  clientUser
+    if (this.attributes && this.attributes.ayamel_ownerType && this.attributes.ayamel_ownerId) {
+        this.clientUser = {
+            id: this.attributes.ayamel_ownerType + ":" + this.attributes.ayamel_ownerId
+        };
+        if (this.attributes && this.attributes.publishStatus === "requested")
+            this.clientUser.id = this.clientUser.id + ":request";
+    }
 }
 
 Resource.prototype.save = function (callback) {
