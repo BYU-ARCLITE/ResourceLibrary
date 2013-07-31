@@ -9,6 +9,9 @@ function Relation(data) {
     this.type = "part_of";
     this.attributes = {};
 
+    if (data.type === "transcriptOf")
+        data.type = "transcript_of";
+    
     if (data) {
         merge(this, data);
     }

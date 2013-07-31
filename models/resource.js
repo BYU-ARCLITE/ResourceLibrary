@@ -12,15 +12,22 @@ var guid = require("./guid.js");
 
 function Resource(data) {
     this.id = guid.guid();
-    this.categories = [];
+    //this.categories = [];
     this.dateModified = new Date().toISOString();
     this.description = "";
     this.keywords = "";
 
     // Language fix
-    this.languages = [];
+    this.languages = {};
     if (data.language)
-        this.languages = [data.language];
+        this.languages = {
+            iso639_3: [data.language]
+        };
+    if (data.languages instanceof Array)
+        data.languages = {
+            iso639_3: data.languages
+        };
+
 
     this.status = "awaiting content";
     this.title = "Unnamed";
@@ -28,12 +35,28 @@ function Resource(data) {
     this.content = {
         files: []
     };
+    this.clientUser = {};
 
     // See if we are creating this resource from something
     if (data) {
         // Create resource from object
         merge(this, data);
     }
+
+    // Make sure mime types and bytes are there for the files
+    for(var i=0; i<this.content.files.length; i++) {
+        if (!this.content.files[i].mimeType && this.content.files[i].mime)
+            this.content.files[i].mimeType = this.content.files[i].mime;
+        if (!this.content.files[i].mime && this.content.files[i].mimeType)
+            this.content.files[i].mime = this.content.files[i].mimeType;
+
+        if (!this.content.files[i].bytes)
+            this.content.files[i].bytes = 0;
+    }
+
+    // Make sure that "text" type is actually "document"
+    if (this.type === "text")
+        this.type = "document";
 }
 
 Resource.prototype.save = function (callback) {

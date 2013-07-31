@@ -29,7 +29,7 @@ exports.createResource = function createResource(req, res) {
         res.set("Access-Control-Allow-Origin", req.get("Origin"));
         resource.createToken(function (token) {
             res.send(201, {
-                content_upload_url: "http://" + req.get("Host") + "/api/v1/resources/" + resource.id + "/content/" + token,
+                contentUploadUrl: "http://" + req.get("Host") + "/api/v1/resources/" + resource.id + "/content/" + token,
                 resource: resource,
                 response: {
                     code: 201,
@@ -168,7 +168,7 @@ exports.requestUploadUrl = function requestUploadUrl(req, res) {
             var resource = new Resource(resourceData);
             resource.createToken(function (token) {
                 res.send({
-                    "content_upload_url": "http://" + req.get("Host") + "/api/v1/resources/" + id + "/content/" + token,
+                    "contentUploadUrl": "http://" + req.get("Host") + "/api/v1/resources/" + id + "/content/" + token,
                     response: {
                         code: 200,
                         message: "OK"
